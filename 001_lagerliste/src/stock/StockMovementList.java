@@ -26,7 +26,7 @@ public class StockMovementList {
 
         for (var current = head; current != null; current = current.next) {
             sb.append(current.valuedStockMovement.toString());
-            if (current.next != null) { sb.append(" -> "); }
+            if (current.next != null) { sb.append("\n"); }
         }
 
         return sb.toString();

@@ -2,12 +2,16 @@ package stock;
 
 import date.Date;
 
-public class ValuedStockMovement extends StockMovement implements Cloneable {
+public class ValuedStockMovement extends StockMovement {
     double pricePerUnit;
 
     public ValuedStockMovement(Date date, double quantity, double pricePerUnit) {
         super(date, quantity);
         this.pricePerUnit = pricePerUnit;
+    }
+
+    public double getValue() {
+        return quantity * pricePerUnit;
     }
 
     @Override
@@ -17,7 +21,7 @@ public class ValuedStockMovement extends StockMovement implements Cloneable {
                 date,
                 quantity,
                 pricePerUnit,
-                quantity * pricePerUnit
+                getValue()
         );
     }
 
