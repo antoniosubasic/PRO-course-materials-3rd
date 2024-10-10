@@ -4,6 +4,11 @@ import java.util.Random;
 
 public class MoveRandomly implements MoveBehaviour {
     private Direction direction;
+    private RoboVac roboVac;
+
+    public MoveRandomly(RoboVac roboVac) {
+        this.roboVac = roboVac;
+    }
 
     @Override
     public void init() {
@@ -11,20 +16,20 @@ public class MoveRandomly implements MoveBehaviour {
     }
 
     @Override
-    public void move(RoboVac roboVac) {
+    public Position getNextMove() {
         var room = roboVac.getRoom();
 
-        int x, y;
+        var pos = new Position(0, 0);
 
         do {
-            x = room.getRobotPosX() + direction.getX();
-            y = room.getRobotPosY() + direction.getY();
+            pos.x = room.getRobotPosition().x + direction.getX();
+            pos.y = room.getRobotPosition().y + direction.getY();
 
-            if (room.getStatus(x, y) == Status.WALL || new Random().nextInt(0, 10) == 0) {
+            if (room.isWall(pos) || new Random().nextInt(0, 10) == 0) {
                 init();
             }
-        } while (room.getStatus(x, y) == Status.WALL);
+        } while (room.isWall(pos));
 
-        room.setRobot(x, y);
+        return pos;
     }
 }

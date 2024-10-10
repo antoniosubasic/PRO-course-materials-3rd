@@ -3,6 +3,7 @@ package roboVac;
 public class RoboVac {
     private String name;
     private Room room;
+    private int moveCount;
     private MoveBehaviour moveBehaviour;
 
     public RoboVac(String name) {
@@ -25,12 +26,20 @@ public class RoboVac {
         this.room = room;
     }
 
-    public void setPosition(int posX, int posY) {
-        room.setRobot(posX, posY);
+    public Position getPosition() {
+        return room.getRobotPosition();
+    }
+
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    public void setPosition(Position pos) {
+        room.setRobotPosition(pos);
     }
 
     public void printRoomStatus() {
-        System.out.println(room);
+        System.out.println(room.getLayout(this.getPosition()));
     }
 
     public void SetMoveBehaviour(MoveBehaviour moveBehaviour) {
@@ -39,16 +48,49 @@ public class RoboVac {
 
     public void clean() {
         room.setAllDirty();
+        resetMoveCount();
 
         room.setCleanAtRobotPosition();
         printRoomStatus();
 
+        moveBehaviour = new MoveVerticalFirst(this);
         moveBehaviour.init();
 
         do {
-            moveBehaviour.move(this);
+            var nextPos = moveBehaviour.getNextMove();
+            if (room.isClean(nextPos)) {
+                moveToTarget(room.getNearestDirtyPosition(room.getRobotPosition()));
+            } else {
+                setPosition(nextPos);
+                increaseMoveCount();
+            }
+
             room.setCleanAtRobotPosition();
             printRoomStatus();
         } while (!room.isClean());
+    }
+
+    private void moveToTarget(Position target) {
+        var moveToTarget = new MoveToTarget(this, target);
+        moveToTarget.init();
+
+        Position next;
+
+        do {
+            next = moveToTarget.getNextMove();
+
+            if (next != null) {
+                setPosition(next);
+                increaseMoveCount();
+            }
+        } while (next != null);
+    }
+
+    private void resetMoveCount() {
+        moveCount = 0;
+    }
+
+    private void increaseMoveCount() {
+        moveCount++;
     }
 }
