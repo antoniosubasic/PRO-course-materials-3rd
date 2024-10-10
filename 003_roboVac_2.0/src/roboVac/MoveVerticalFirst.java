@@ -12,16 +12,16 @@ public class MoveVerticalFirst implements MoveBehaviour {
     }
 
     @Override
-    public void move(RoboVac roboVac) {
+    public Position getNextMove(RoboVac roboVac) {
         var room = roboVac.getRoom();
 
-        int x, y;
+        var pos = new Position(0, 0);
 
         do {
-            x = room.getRobotPosX() + direction.getX();
-            y = room.getRobotPosY() + direction.getY();
+            pos.x = room.getRobotPosition().x + direction.getX();
+            pos.y = room.getRobotPosition().y + direction.getY();
 
-            if (room.getStatus(x, y) == Status.WALL) {
+            if (room.getStatus(pos) == Status.WALL) {
                 if (direction.isHorizontal()) {
                     horizontal = (horizontal == Direction.EAST ? Direction.WEST : Direction.EAST);
                     direction = vertical;
@@ -32,8 +32,8 @@ public class MoveVerticalFirst implements MoveBehaviour {
                 horizontal = direction;
                 direction = vertical = (vertical == Direction.NORTH ? Direction.SOUTH : Direction.NORTH);
             }
-        } while (room.getStatus(x, y) == Status.WALL);
+        } while (room.getStatus(pos) == Status.WALL);
 
-        room.setRobot(x, y);
+        return pos;
     }
 }

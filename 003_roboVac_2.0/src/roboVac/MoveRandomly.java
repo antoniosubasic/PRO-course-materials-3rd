@@ -11,20 +11,20 @@ public class MoveRandomly implements MoveBehaviour {
     }
 
     @Override
-    public void move(RoboVac roboVac) {
+    public Position getNextMove(RoboVac roboVac) {
         var room = roboVac.getRoom();
 
-        int x, y;
+        var pos = new Position(0, 0);
 
         do {
-            x = room.getRobotPosX() + direction.getX();
-            y = room.getRobotPosY() + direction.getY();
+            pos.x = room.getRobotPosition().x + direction.getX();
+            pos.y = room.getRobotPosition().y + direction.getY();
 
-            if (room.getStatus(x, y) == Status.WALL || new Random().nextInt(0, 10) == 0) {
+            if (room.getStatus(pos) == Status.WALL || new Random().nextInt(0, 10) == 0) {
                 init();
             }
-        } while (room.getStatus(x, y) == Status.WALL);
+        } while (room.getStatus(pos) == Status.WALL);
 
-        room.setRobot(x, y);
+        return pos;
     }
 }
