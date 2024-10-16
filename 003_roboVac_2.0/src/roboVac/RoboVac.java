@@ -56,7 +56,7 @@ public class RoboVac {
         moveBehaviour = new MoveVerticalFirst(this);
         moveBehaviour.init();
 
-        do {
+        while (!room.isClean()) {
             var nextPos = moveBehaviour.getNextMove();
             if (room.isClean(nextPos)) {
                 moveToTarget(room.getNearestDirtyPosition(room.getRobotPosition()));
@@ -67,7 +67,7 @@ public class RoboVac {
 
             room.setCleanAtRobotPosition();
             printRoomStatus();
-        } while (!room.isClean());
+        }
     }
 
     private void moveToTarget(Position target) {
@@ -76,14 +76,10 @@ public class RoboVac {
 
         Position next;
 
-        do {
-            next = moveToTarget.getNextMove();
-
-            if (next != null) {
-                setPosition(next);
-                increaseMoveCount();
-            }
-        } while (next != null);
+        while ((next = moveToTarget.getNextMove()) != null) {
+            setPosition(next);
+            increaseMoveCount();
+        }
     }
 
     private void resetMoveCount() {

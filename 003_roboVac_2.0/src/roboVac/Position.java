@@ -18,10 +18,6 @@ public class Position {
         };
     }
 
-    public int getDistance(Position pos) {
-        return Math.abs(this.x - pos.x) + Math.abs(this.y - pos.y);
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Position) {

@@ -91,8 +91,9 @@ public class Room {
             for (var x = 0; x < distances[0].length; x++) {
                 var position = new Position(x, y);
 
-                if (layout.getStatus(position) == Status.DIRTY && (nearestDirtyPosition == null
-                        || pos.getDistance(position) < pos.getDistance(nearestDirtyPosition))) {
+                if (
+                    isDirty(position)
+                    && (nearestDirtyPosition == null|| distances[position.y][position.x] < distances[nearestDirtyPosition.y][nearestDirtyPosition.x])) {
                     nearestDirtyPosition = position;
                 }
             }
