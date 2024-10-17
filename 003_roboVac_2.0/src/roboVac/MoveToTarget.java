@@ -29,8 +29,10 @@ public class MoveToTarget implements MoveBehaviour {
         var neighbours = roboVac.getPosition().getNeighbours();
         Position pos = null;
 
+        var room = roboVac.getRoom();
+
         for (var neighbour : neighbours) {
-            if (distanceMatrix[neighbour.y][neighbour.x] != -1
+            if (room.isAccessible(neighbour)
                     && (pos == null || distanceMatrix[neighbour.y][neighbour.x] < distanceMatrix[pos.y][pos.x])) {
                 pos = neighbour;
             }
