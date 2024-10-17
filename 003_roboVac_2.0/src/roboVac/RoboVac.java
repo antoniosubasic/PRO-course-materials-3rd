@@ -79,6 +79,7 @@ public class RoboVac {
         while ((next = moveToTarget.getNextMove()) != null) {
             setPosition(next);
             increaseMoveCount();
+            printRoomStatus();
         }
     }
 
